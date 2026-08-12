@@ -25,30 +25,32 @@ AC_SEARCH_LIBS([ceil], [m])
 # https://developers.redhat.com/blog/2020/05/22/stack-clash-mitigation-in-gcc-part-3/
 # https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html
 #
+AC_SUBST(BASE_CFLAGS, ["$CFLAGS"])
+AC_SUBST(ERR_CFLAGS, ["-Werror"])
+AC_SUBST(CFLAGS, [""])
 
-AC_DEFUN([AC_CHECK_CFLAG], [
-	HOLD="$CFLAGS"
+AC_DEFUN([AX_CHECK_CFLAG], [
 	AC_MSG_CHECKING(whether compiler supports $1)
-	CFLAGS="$HOLD $1 -Werror"
+   CFLAGS="$BASE_CFLAGS $1 -Werror"
 	AC_COMPILE_IFELSE(
 		[AC_LANG_PROGRAM(
 			[[]],
 			[[]]
 		)],
 		[
-			HOLD="$CFLAGS"
 			AC_MSG_RESULT(yes)
+         ADDL_CFLAGS="$ADDL_CFLAGS $1"
 		],
 		[
 			AC_MSG_RESULT(no)
 		]
 	)
-	CFLAGS="$HOLD"
+	CFLAGS=
 ])
+AX_CHECK_CFLAG([[-flto=auto]])
+AX_CHECK_CFLAG([[-fstack-clash-protection]])
+AX_CHECK_CFLAG([[-fstack-protector-strong]])
 
-AC_CHECK_CFLAG([[-flto=auto]])
-AC_CHECK_CFLAG([[-fstack-clash-protection]])
-AC_CHECK_CFLAG([[-fstack-protector-strong]])
 
 #
 # Support for check unit tests
@@ -93,10 +95,10 @@ AC_ARG_WITH([coverage],
 )
 
 AS_IF([test "x$with_coverage" != xno], [
-	AC_CHECK_CFLAG([[-fprofile-arcs]])
+	AX_CHECK_CFLAG([[-fprofile-arcs]])
 
 	# see src/Makefile.am
-	# AC_CHECK_CFLAG([[-ftest-coverage]])
+	# AX_CHECK_CFLAG([[-ftest-coverage]])
 
 	AC_DEFINE([SUPPORT_COVERAGE], [1], [Define if you want to support coverage tests])
 ])
@@ -121,6 +123,7 @@ AM_COND_IF([DEBUG], [
 #
 #
 #
+AC_SUBST(ADDL_CFLAGS)
 
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_FILES([

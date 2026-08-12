@@ -5,19 +5,13 @@
 # https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html
 # https://access.redhat.com/blogs/766093/posts/1976213
 #
+AM_CFLAGS = @BASE_CFLAGS@ @ADDL_CFLAGS@ @ERR_CFLAGS@
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" \
 	-DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DYY_NO_INPUT \
-	-DYY_NO_UNPUT \
-	-D_FORTIFY_SOURCE=2 \
-	-Wall \
-	-Werror
-
-#
-#
-#
+	-DYY_NO_UNPUT
 
 AM_YFLAGS = -d
 
