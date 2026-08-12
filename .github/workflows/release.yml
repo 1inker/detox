@@ -1,0 +1,33 @@
+name: Create Release and Upload Custom Tarball
+
+# The script runs automatically only when pushing any tag starting with "v" (e.g., v3.0.2)
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allows the script to create releases and upload assets
+
+    steps:
+    # 1. Fetch the repository code along with all history and tags
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # 2. Create a clean, named archive using git archive
+    # The tool automatically replaces ${{ github.ref_name }} with the actual tag name (e.g., v3.0.2)
+    - name: Create Custom Tarball
+      run: |
+        git archive --format=tar.gz --prefix=detox-${{ github.ref_name }}/ -o detox-${{ github.ref_name }}.tar.gz ${{ github.ref_name }}
+
+    # 3. Create a GitHub Release and attach the archive to Assets
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: detox-${{ github.ref_name }}.tar.gz
+        generate_release_notes: true # GitHub will automatically generate the changelog (commit list)
