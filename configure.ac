@@ -1,6 +1,7 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([detox], [3.0.1], [detox.dharple at gmail.com], [], [https://github.com/dharple/detox])
-AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AC_INIT([detox], [3.0.2], [detox.dharple at gmail.com], [], [https://github.com/dharple/detox])
+AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror])
+AM_SILENT_RULES([yes])
 
 AC_PROG_CC
 AC_PROG_LEX([noyywrap])
@@ -50,6 +51,8 @@ AC_DEFUN([AX_CHECK_CFLAG], [
 AX_CHECK_CFLAG([[-flto=auto]])
 AX_CHECK_CFLAG([[-fstack-clash-protection]])
 AX_CHECK_CFLAG([[-fstack-protector-strong]])
+AX_CHECK_CFLAG([[-Wall]])
+AX_CHECK_CFLAG([[-pedantic]])
 
 
 #

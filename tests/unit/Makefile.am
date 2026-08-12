@@ -3,13 +3,8 @@ if WITH_CHECK
 # adjust the check timeout
 export CK_DEFAULT_TIMEOUT = 10
 
-AM_CFLAGS = \
-	@CHECK_CFLAGS@ \
-	-DYY_NO_INPUT \
-	-DYY_NO_UNPUT \
-	-D_FORTIFY_SOURCE=2 \
-	-Wall \
-	-Werror
+AM_CPPFLAGS = -DYY_NO_INPUT -DYY_NO_UNPUT
+AM_CFLAGS = @BASE_CFLAGS@ @ADDL_CFLAGS@ @ERR_CFLAGS@
 
 AM_LDFLAGS = \
 	$(top_builddir)/src/builtin_table.o \
