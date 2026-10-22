@@ -85,6 +85,19 @@ sequence "lower" {
 	};
 };
 
+# handles UTF-8 while preserving Russian Cyrillic characters
+sequence "cyrillic-safe" {
+	utf_8 {
+		builtin "unicode";
+	};
+	safe {
+		filename "table/cyrillic_safe.tbl";
+	};
+	wipeup {
+		remove_trailing;
+	};
+};
+
 #
 # Sequences meant primarily for inline-detox
 #
